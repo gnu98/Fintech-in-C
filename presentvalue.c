@@ -6,12 +6,12 @@
 
 int main(int argc, char* argv[])
 {
-  int i, N, AN;
-  double rate, *cf, *ccf, pv,rr;
+  int i, np;
+  double r, g, *cf, pv;
 
   if (argc == 3) {
-    rate = atof(argv[1]);
-    N = atoi(argv[2]);
+    r = atof(argv[1]);
+    np = atoi(argv[2]);
   }
   else {
     printf("Warning: command argument has some problem, both 1) interest rate and \
@@ -19,19 +19,21 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  if ((cf = malloc(N *sizeof(double))) == NULL) {
+  if ((cf = malloc(np *sizeof(double))) == NULL) {
    printf("FatalError: Insufficient memory\n");
     return -2;
   }
 
   /* i = 0, it refers to the present */
-  for (i = 0, ccf = cf; i < N && (scanf("%lf",ccf)) != EOF; i++, ccf++) //put 'scanf()' behind '&&',so that no more read
-    ;
-  AN = i;
+  for (i = 0; i < np; i++) 
+    if ((scanf("%lf",&cf[i])) == EOF)
+      break;
+
+  np = i;
   pv = 0;
-  rr = 1 + rate;
-  for (i = 0; i < AN; i++)
-  pv += cf[i] / pow(rr,i);
+  g = 1 + r;
+  for (i = 0; i < np; i++)
+  pv += cf[i] / pow(g,i);
 
   printf("The present value is %.2f\n", pv);
   free(cf);
